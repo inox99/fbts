@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>IndexDb 1</title>
+	<script src="Scripts/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+	<div id="s1"></div>
+	<button id="bputsp">putSp</button>
+	<button id="bgetsp">getSp</button>
+	<button id="bindexOf">indexOf</button>
+
+	<script>
+		//openDatabase
+		// IndexedDb
+		// http://html5index.org/index.html
+		// https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
+		// http://mdn.beonex.com/en/IndexedDB/Using_IndexedDB.html
+		// http://www.html5rocks.com/de/tutorials/indexeddb/todo/
+		// http://msdn.microsoft.com/en-us/ie/jj154905%28v=vs.94%29
+		// http://www.peterkroener.de/indexed-db-die-neue-html5-datenbank-im-browser-teil-1-ein-kurzer-ueberblick/
+		//
+		// JqGrid
+		// http://trirand.com/blog/jqgrid/jqgrid.html
+		// http://trirand.com/jqgridwiki/doku.php
+		// http://trirand.com/jqgridwiki/doku.php?id=wiki:options	
+		//
+		// ftp://web516:Rph6oTWx@109.237.134.10/html/mobile/stpu
+		//-----------------------------------------------------------------
+
+		var vSpiele;
+		var FbDb = {};
+
+		FbDb.db = null;
+		FbDb.onerror = function (e) {
+			console.log(e);
+		};
+		FbDb.SaveSpiele = function (e) {
+			//var jsSpiele = $.parseJSON("");
+			var vSpiele = [
+				{ id: 1001, ht: "Deutschland", at: "Portugal" },
+				{ id: 1002, ht: "Deutschland", at: "Ghana" },
+				{ id: 1003, ht: "Deutschland", at: "USA" }
+			];
+			var jsSpiele = JSON.stringify(vSpiele);
+			var vSpielejs = $.parseJSON(jsSpiele);
+			var trans = FbDb.db.transaction(["spiele"], "readwrite");
+			var osSpiele = trans.objectStore('spiele');
+			var req = osSpiele.put(vSpiele);
+		}
+		FbDb.GetSpiele = function (e) {
+			var trans = FbDb.db.transaction(["spiele"], "readonly");
+			var osSpiele = trans.objectStore('spiele');
+			var req = osSpiele.openCursor();
+			req.onsuccess = function (evt) {
+				var oResult = null; // assume no result.
+				if (evt.target.result != null) {
+					vSpiele = evt.target.result.value;
+				}
+			}
+		}
+
+		if (false) {
+			indexedDB.deleteDatabase("FbTs");
+		}
+		else {
+			bp = 0;
+			var req = indexedDB.open("FbTs");
+			//var req = indexedDB.open("FbTs", 1);
+			//var req = indexedDB.open("FbTs", 2);
+			//var req = indexedDB.open("FbTs", 3);
+			req.onerror = function (e) {
+				var v = e;
+			}
+			req.onupgradeneeded = function (e) {
+				var db = FbDb.db = e.target.result;
+
+				if (db.version == 1) {
+					os = db.createObjectStore('user', {
+						keyPath: 'id',
+						autoIncrement: true
+					});
+					os = db.createObjectStore('spiele', {
+						keyPath: 'id',
+						autoIncrement: true
+					});
+					os = db.createObjectStore('tipps', {
+						keyPath: 'id',
+						autoIncrement: true
+					});
+				}
+			}
+			req.onsuccess = function (e) {
+				var db = FbDb.db = e.target.result;
+				if (
+					!db.objectStoreNames.contains('spiele')
+					) {
+					$("#s1").text("kein 'spiele' objectstore vorhanden");
+				}
+			}
+		}
+		function getSpielOfId(id) {
+			$.each(vSpiele, function (key, value) {
+				if (id = value.id)
+					return vSpiele[id];
+			});
+		}
+
+		$("#bputsp").click(function () {
+			$("#s1").text("Hallo");
+
+			if (!indexedDB) {
+				$("#s1").text("indexedDB = null");
+				return;
+			}
+			FbDb.SaveSpiele();
+		})
+		$("#bgetsp").click(function () {
+			FbDb.GetSpiele();
+		})
+		$("#bindexOf").click(function () {
+			var i = vSpiele.indexOf({ id: 1002 });
+
+		})
+
+	</script>
+</body>
+</html>

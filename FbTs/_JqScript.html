@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>JqScript</title>
+	<script src="Scripts/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+	<div id="s1"></div>
+	<button id="bxs">xs</button>
+	<script>
+		//openDatabase
+		$("#bxs").click(function () {
+			$("#s1").text("Hallo");
+
+			if (!indexedDB) {
+				$("#s1").text("indexedDB = null");
+			}
+		})
+
+
+		////FACEBOKK 
+		//window.fbAsyncInit = function () {
+		//	FB.init({
+		//		appId: 'epilger.de/fbts',
+		//		xfbml: true,
+		//		version: 'v2.0'
+		//	});
+		//};
+		//(function (d, s, id) {
+		//	var js, fjs = d.getElementsByTagName(s)[0];
+		//	if (d.getElementById(id)) { return; }
+		//	js = d.createElement(s); js.id = id;
+		//	js.src = "//connect.facebook.net/en_US/sdk.js";
+		//	fjs.parentNode.insertBefore(js, fjs);
+		//}(document, 'script', 'facebook-jssdk'));
+	</script>
+</body>
+</html>

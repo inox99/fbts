@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>mpg1</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="Content/jquery.mobile.external-png-1.4.2.min.css" rel="stylesheet" />
+	<script src="Scripts/jquery-2.1.1.min.js"></script>
+	<script src="Scripts/jquery.mobile-1.4.2.min.js"></script>
+</head>
+<body>
+	<div data-role="page">
+		<div data-role="header">
+			<h1>Page Title</h1>
+		</div>
+		<div role="main" class="ui-content">
+			<div id="dpin">
+				<div class="ui-grid-b">
+					<div class="ui-block-a">
+						<label for="tpin">Pin eingeben:</label>
+					</div>
+					<div class="ui-block-b">
+						<input id="tpin" type="number" />
+					</div>
+					<div class="ui-block-c">
+						<button id="bpin">Senden</button>
+					</div>
+				</div>
+			</div>
+			<div>
+				<button id="ut">Unittest</button>
+			</div>
+		</div>
+		<div data-role="footer">...</div>
+	</div>
+	<script>
+		$(function () {
+			$("#ut").on("click", function () {
+				$.ajax({
+					url: "fbts.ashx?cmd=unittest",
+					context: document.body
+				}).done(function (data) {
+				});
+			});
+
+			$("#bpin").on("click", function () {
+				$.ajax({
+					url: "fbts.ashx?cmd=requkey&pin=1111",
+					context: document.body
+				}).done(function (data) {
+					localStorage.UKey = data;
+				});
+			});
+
+			if (localStorage.UKey == null) {
+				$("#dpin").show();
+			}
+			else {
+				//				$("#dpin").hide();
+			}
+		});
+	</script>
+</body>
+</html>
